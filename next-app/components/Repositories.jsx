@@ -1,13 +1,13 @@
-import css from "styled-jsx/css";
-import { useRouter } from "next/router";
-import Link from "next/link";
-import formatDistance from "date-fns/formatDistance";
+import css from 'styled-jsx/css';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+import formatDistance from 'date-fns/formatDistance';
 
 const style = css`
   .repos-wrapper {
     width: 100%;
     height: 90vh;
-    overflow: scroll;
+    overflow-y: scroll;
     padding: 0px 16px;
   }
   .repos-header {
@@ -90,6 +90,7 @@ const style = css`
     border-right: 1px solid rgba(27, 31, 35, 0.15);
   }
 
+  /* hover 했을 때 버튼이 disabled가 아니라면 작동 */
   .repository-pagination button:hover:not([disabled]) {
     background-color: #0366d6;
     color: white;
@@ -102,7 +103,7 @@ const style = css`
 
 export default function Repositories({ user, repos }) {
   const router = useRouter();
-  const { page = "1" } = router.query;
+  const { page = '1' } = router.query;
 
   if (!user || !repos) return null;
 
@@ -137,15 +138,19 @@ export default function Repositories({ user, repos }) {
         <div className="repository-pagination">
           <Link href={`/users/${user.login}?page=${Number(page) - 1}`}>
             <a>
-              <button disabled={!page || page === "1"}>Previous</button>
+              <button type="button" disabled={!page || page === '1'}>
+                Previous
+              </button>
             </a>
           </Link>
 
           <Link
-            href={`/users/${user.login}?page=${!page ? "2" : Number(page) + 1}`}
+            href={`/users/${user.login}?page=${!page ? '2' : Number(page) + 1}`}
           >
             <a>
-              <button disabled={repos.length < 10}>Next</button>
+              <button type="button" disabled={repos.length < 10}>
+                Next
+              </button>
             </a>
           </Link>
         </div>
