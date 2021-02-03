@@ -37,13 +37,19 @@ module.exports = {
     'react/jsx-props-no-spreading': 'off',
     'import/no-extraneous-dependencies': 'off',
     'jsx-a11y/label-has-associated-control': 'off',
+    'react/jsx-one-expression-per-line': 'off',
     'import/extensions': [
       'error',
       'ignorePackages',
       { js: 'never', jsx: 'never', ts: 'never', tsx: 'never', json: 'never' },
     ],
+    'no-use-before-define': 'off',
+    '@typescript-eslint/no-use-before-define': ['error'],
+    'react/no-array-index-key': 'off',
   },
   settings: {
-    'import/resolver': { node: { extensions: ['.js', '.jsx', '.ts', '.tsx'] } },
+    'import/resolver': {
+      node: { extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts'] },
+    },
   },
 };
