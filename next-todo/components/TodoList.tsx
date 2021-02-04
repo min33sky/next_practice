@@ -1,9 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
+import { useRouter } from 'next/dist/client/router';
 import palette from '../styles/palette';
 import { TodoType } from '../types/todo';
 import TrashCanIcon from '../public/statics/svg/trash_can.svg';
 import CheckMarkIcon from '../public/statics/svg/check_mark.svg';
+import { checkTodoAPI } from '../pages/api/todo';
 
 const Container = styled.div`
   width: 100%;
@@ -119,9 +121,12 @@ type ObjectIndexType = {
 };
 
 export default function TodoList({ todos }: IProps) {
+  // const router = useRouter();
+  const [localTodos, setLocalTodos] = useState(todos);
+
   const todoColorNums = useMemo(() => {
     const colors: ObjectIndexType = {};
-    todos.forEach((todo) => {
+    localTodos.forEach((todo) => {
       const value = colors[todo.color];
       if (!value) {
         // 키가 존재하지 않으면
@@ -133,11 +138,32 @@ export default function TodoList({ todos }: IProps) {
     return colors;
   }, [todos]);
 
+  const checkTodo = async (id: number) => {
+    try {
+      await checkTodoAPI(id);
+      console.log('체크하였습니다.');
+      // router.reload();
+      // router.push('/');
+      const newTodos = localTodos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            checked: !todo.checked,
+          };
+        }
+        return todo;
+      });
+      setLocalTodos(newTodos);
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <Container>
       <TodoHeader>
         <p>
-          남은 TODO<span>{todos.length}개</span>
+          남은 TODO<span>{localTodos.length}개</span>
         </p>
         <div>
           {Object.keys(todoColorNums).map((color, index) => (
@@ -150,7 +176,7 @@ export default function TodoList({ todos }: IProps) {
       </TodoHeader>
 
       <ul>
-        {todos.map((todo) => (
+        {localTodos.map((todo) => (
           <TodoItemWrapper key={todo.id}>
             <TodoItem checked={todo.checked} color={todo.color}>
               <div />
@@ -159,11 +185,22 @@ export default function TodoList({ todos }: IProps) {
             <TodoRightSide>
               {todo.checked && (
                 <>
-                  <TrashCanIcon className="todo-trash-can" />
-                  <CheckMarkIcon className="todo-check-mark" />
+                  <TrashCanIcon
+                    className="todo-trash-can"
+                    onClick={() => console.log('구현중')}
+                  />
+                  <CheckMarkIcon
+                    className="todo-check-mark"
+                    onClick={() => checkTodo(todo.id)}
+                  />
                 </>
               )}
-              {!todo.checked && <CheckButton checked={todo.checked} />}
+              {!todo.checked && (
+                <CheckButton
+                  checked={todo.checked}
+                  onClick={() => checkTodo(todo.id)}
+                />
+              )}
             </TodoRightSide>
           </TodoItemWrapper>
         ))}
