@@ -14,7 +14,7 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
       res.send(e);
     }
   } else if (req.method === 'POST') {
-    // 값을 받았는지 확인
+    // 게시물에 필요한 값들을 받았는지 확인
     const { text, color } = req.body;
     if (!text || !color) {
       return res.status(400).send('text 혹은 color가 없습니다.');

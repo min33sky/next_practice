@@ -14,6 +14,9 @@ const Container = styled.div`
   }
 `;
 
+/**
+ * Header
+ */
 export default function Header() {
   return (
     <Container>

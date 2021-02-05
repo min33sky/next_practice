@@ -1,12 +1,15 @@
 import { GetServerSideProps, NextPage } from 'next';
 import TodoList from '../components/TodoList';
+import { getTodosAPI } from '../lib/api/todo';
 import { TodoType } from '../types/todo';
-import { getTodosAPI } from './api/todo';
 
 interface IProps {
   todos: TodoType[];
 }
 
+/**
+ * 시작 페이지
+ */
 const index: NextPage<IProps> = ({ todos }) => {
   console.log(process.env.NEXT_PUBLIC_API_URL, '클라이언트');
   return <TodoList todos={todos} />;

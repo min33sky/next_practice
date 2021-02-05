@@ -1,11 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { useRouter } from 'next/dist/client/router';
 import palette from '../styles/palette';
 import { TodoType } from '../types/todo';
 import TrashCanIcon from '../public/statics/svg/trash_can.svg';
 import CheckMarkIcon from '../public/statics/svg/check_mark.svg';
-import { checkTodoAPI, deleteTodoAPI } from '../pages/api/todo';
+import { checkTodoAPI, deleteTodoAPI } from '../lib/api/todo';
 
 const Container = styled.div`
   width: 100%;
@@ -136,7 +135,7 @@ export default function TodoList({ todos }: IProps) {
       }
     });
     return colors;
-  }, [todos]);
+  }, [localTodos]);
 
   const checkTodo = async (id: number) => {
     try {
@@ -164,7 +163,7 @@ export default function TodoList({ todos }: IProps) {
       await deleteTodoAPI(id);
       const newTodos = localTodos.filter((todo) => todo.id !== id);
       setLocalTodos(newTodos);
-      console.log('삭제했습니다.');
+      console.log('삭제했습니다.', newTodos.length, localTodos.length);
     } catch (e) {
       console.log(e);
     }
@@ -193,25 +192,32 @@ export default function TodoList({ todos }: IProps) {
               <div />
               <p>{todo.text}</p>
             </TodoItem>
+
             <TodoRightSide>
-              {todo.checked && (
-                <>
-                  <TrashCanIcon
-                    className="todo-trash-can"
-                    onClick={() => deleteTodo(todo.id)}
-                  />
-                  <CheckMarkIcon
-                    className="todo-check-mark"
+              {
+                // 체크 했을 때
+                todo.checked && (
+                  <>
+                    <TrashCanIcon
+                      className="todo-trash-can"
+                      onClick={() => deleteTodo(todo.id)}
+                    />
+                    <CheckMarkIcon
+                      className="todo-check-mark"
+                      onClick={() => checkTodo(todo.id)}
+                    />
+                  </>
+                )
+              }
+              {
+                // 체크하지 않알을 때
+                !todo.checked && (
+                  <CheckButton
+                    checked={todo.checked}
                     onClick={() => checkTodo(todo.id)}
                   />
-                </>
-              )}
-              {!todo.checked && (
-                <CheckButton
-                  checked={todo.checked}
-                  onClick={() => checkTodo(todo.id)}
-                />
-              )}
+                )
+              }
             </TodoRightSide>
           </TodoItemWrapper>
         ))}
