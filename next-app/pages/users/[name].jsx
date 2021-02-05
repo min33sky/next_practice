@@ -1,7 +1,7 @@
-import axios from "axios";
-import css from "styled-jsx/css";
-import Profile from "../../components/Profile";
-import Repositories from "../../components/Repositories";
+import axios from 'axios';
+import css from 'styled-jsx/css';
+import Profile from '../../components/Profile';
+import Repositories from '../../components/Repositories';
 
 const style = css`
   .user-contents-wrapper {

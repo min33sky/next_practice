@@ -1,8 +1,8 @@
-import Link from "next/link";
-import { useState } from "react";
+import Link from 'next/link';
+import { useState } from 'react';
 
 export default function App() {
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState('');
   return (
     <div>
       <label>

@@ -1,5 +1,5 @@
-import axios from "axios";
-import React from "react";
+import axios from 'axios';
+import React from 'react';
 
 export default function name({ user, time }) {
   const username = user?.name;
@@ -47,7 +47,7 @@ export async function getStaticProps({ params }) {
 // 페이지의 경로가 외부 데이터에 의존할 때 사용
 export async function getStaticPaths() {
   return {
-    paths: [{ params: { name: "jerrynim" } }],
+    paths: [{ params: { name: 'jerrynim' } }],
     fallback: true, // 지정되지 않은 경로는 404 에러 페이지로 라우팅
   };
 }

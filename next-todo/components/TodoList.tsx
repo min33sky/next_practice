@@ -5,7 +5,7 @@ import palette from '../styles/palette';
 import { TodoType } from '../types/todo';
 import TrashCanIcon from '../public/statics/svg/trash_can.svg';
 import CheckMarkIcon from '../public/statics/svg/check_mark.svg';
-import { checkTodoAPI } from '../pages/api/todo';
+import { checkTodoAPI, deleteTodoAPI } from '../pages/api/todo';
 
 const Container = styled.div`
   width: 100%;
@@ -159,6 +159,17 @@ export default function TodoList({ todos }: IProps) {
     }
   };
 
+  const deleteTodo = async (id: number) => {
+    try {
+      await deleteTodoAPI(id);
+      const newTodos = localTodos.filter((todo) => todo.id !== id);
+      setLocalTodos(newTodos);
+      console.log('삭제했습니다.');
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <Container>
       <TodoHeader>
@@ -187,7 +198,7 @@ export default function TodoList({ todos }: IProps) {
                 <>
                   <TrashCanIcon
                     className="todo-trash-can"
-                    onClick={() => console.log('구현중')}
+                    onClick={() => deleteTodo(todo.id)}
                   />
                   <CheckMarkIcon
                     className="todo-check-mark"
