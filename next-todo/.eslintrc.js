@@ -43,7 +43,9 @@ module.exports = {
       'ignorePackages',
       { js: 'never', jsx: 'never', ts: 'never', tsx: 'never', json: 'never' },
     ],
+    'no-case-declarations': 'off',
     'no-use-before-define': 'off',
+    'global-require': 'off',
     '@typescript-eslint/no-use-before-define': ['error'],
     'react/no-array-index-key': 'off',
     // 리액트 Hooks 관련
