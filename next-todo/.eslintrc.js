@@ -46,6 +46,7 @@ module.exports = {
     'no-case-declarations': 'off',
     'no-use-before-define': 'off',
     'global-require': 'off',
+    'no-param-reassign': 'off',
     '@typescript-eslint/no-use-before-define': ['error'],
     'react/no-array-index-key': 'off',
     // 리액트 Hooks 관련

@@ -1,10 +1,13 @@
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 import palette from '../styles/palette';
 import { TodoType } from '../types/todo';
 import TrashCanIcon from '../public/statics/svg/trash_can.svg';
 import CheckMarkIcon from '../public/statics/svg/check_mark.svg';
 import { checkTodoAPI, deleteTodoAPI } from '../lib/api/todo';
+import { RootState } from '../store';
+import { todoActions } from '../store/todo';
 
 const Container = styled.div`
   width: 100%;
@@ -110,22 +113,18 @@ const CheckButton = styled.button<{ checked: boolean }>`
   cursor: pointer;
 `;
 
-interface IProps {
-  todos: TodoType[];
-}
-
 //* 객체의 문자열 인덱스 사용을 위한 타입
 type ObjectIndexType = {
   [key: string]: number | undefined;
 };
 
-export default function TodoList({ todos }: IProps) {
-  // const router = useRouter();
-  const [localTodos, setLocalTodos] = useState(todos);
+export default function TodoList() {
+  const dispatch = useDispatch();
+  const todos = useSelector((state) => state.todo.todos);
 
   const todoColorNums = useMemo(() => {
     const colors: ObjectIndexType = {};
-    localTodos.forEach((todo) => {
+    todos.forEach((todo) => {
       const value = colors[todo.color];
       if (!value) {
         // 키가 존재하지 않으면
@@ -135,7 +134,7 @@ export default function TodoList({ todos }: IProps) {
       }
     });
     return colors;
-  }, [localTodos]);
+  }, [todos]);
 
   const checkTodo = async (id: number) => {
     try {
@@ -143,7 +142,7 @@ export default function TodoList({ todos }: IProps) {
       console.log('체크하였습니다.');
       // router.reload();
       // router.push('/');
-      const newTodos = localTodos.map((todo) => {
+      const newTodos = todos.map((todo) => {
         if (todo.id === id) {
           return {
             ...todo,
@@ -152,7 +151,7 @@ export default function TodoList({ todos }: IProps) {
         }
         return todo;
       });
-      setLocalTodos(newTodos);
+      dispatch(todoActions.setTodo(newTodos));
     } catch (e) {
       console.log(e);
     }
@@ -161,9 +160,9 @@ export default function TodoList({ todos }: IProps) {
   const deleteTodo = async (id: number) => {
     try {
       await deleteTodoAPI(id);
-      const newTodos = localTodos.filter((todo) => todo.id !== id);
-      setLocalTodos(newTodos);
-      console.log('삭제했습니다.', newTodos.length, localTodos.length);
+      const newTodos = todos.filter((todo) => todo.id !== id);
+      dispatch(todoActions.setTodo(newTodos));
+      console.log('삭제했습니다.', newTodos.length, todos.length);
     } catch (e) {
       console.log(e);
     }
@@ -173,7 +172,7 @@ export default function TodoList({ todos }: IProps) {
     <Container>
       <TodoHeader>
         <p>
-          남은 TODO<span>{localTodos.length}개</span>
+          남은 TODO<span>{todos.length}개</span>
         </p>
         <div>
           {Object.keys(todoColorNums).map((color, index) => (
@@ -186,7 +185,7 @@ export default function TodoList({ todos }: IProps) {
       </TodoHeader>
 
       <ul>
-        {localTodos.map((todo) => (
+        {todos.map((todo) => (
           <TodoItemWrapper key={todo.id}>
             <TodoItem checked={todo.checked} color={todo.color}>
               <div />

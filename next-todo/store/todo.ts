@@ -1,14 +1,5 @@
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { TodoType } from '../types/todo.d';
-//* 액션타입 정의
-export const INIT_TODO_LIST = 'todo/INIT_TODO_LIST';
-
-//* 액션 생성자 정의
-export const setTodo = (payload: TodoType[]) => ({
-  type: INIT_TODO_LIST,
-  payload,
-});
-
-export const todoActions = { setTodo };
 
 interface TodoReduxState {
   todos: TodoType[];
@@ -18,14 +9,17 @@ const initialState: TodoReduxState = {
   todos: [],
 };
 
-//* 리듀서
-export default function reducer(state = initialState, action: any) {
-  switch (action.type) {
-    case INIT_TODO_LIST:
-      const newState = { ...state, todos: action.payload };
-      return newState;
+const todo = createSlice({
+  name: 'todo',
+  initialState,
+  reducers: {
+    // 투두 변경하기
+    setTodo(state, action: PayloadAction<TodoType[]>) {
+      state.todos = action.payload;
+    },
+  },
+});
 
-    default:
-      return state;
-  }
-}
+export const todoActions = { ...todo.actions };
+
+export default todo;
