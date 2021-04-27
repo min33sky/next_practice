@@ -1,6 +1,6 @@
-import React from "react";
-import css from "styled-jsx/css";
-import { GoMail, GoOrganization, GoLink, GoLocation } from "react-icons/go";
+import React from 'react';
+import css from 'styled-jsx/css';
+import { GoMail, GoOrganization, GoLink, GoLocation } from 'react-icons/go';
 
 const style = css`
   .profile-box {
@@ -49,7 +49,7 @@ export default function Profile({ user }) {
           <img
             className="profile-image"
             src={user.avatar_url}
-            alt={`${user.name} profile image`}
+            alt={`${user.name} 프로필 사진`}
           />
         </div>
         <h2 className="profile-username">{user.name}</h2>

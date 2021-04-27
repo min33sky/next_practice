@@ -6,7 +6,7 @@ import formatDistance from 'date-fns/formatDistance';
 const style = css`
   .repos-wrapper {
     width: 100%;
-    height: 90vh;
+    height: 80vh;
     overflow-y: scroll;
     padding: 0px 16px;
   }
@@ -135,6 +135,7 @@ export default function Repositories({ user, repos }) {
               </p>
             </div>
           ))}
+
         <div className="repository-pagination">
           <Link href={`/users/${user.login}?page=${Number(page) - 1}`}>
             <a>

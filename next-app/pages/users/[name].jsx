@@ -10,66 +10,48 @@ const style = css`
   }
 `;
 
-export default function name({ user, repos }) {
-  if (!user) return null;
+const Name = ({ user, repos }) => (
+  <div className="user-contents-wrapper">
+    <Profile user={user} />
+    <Repositories user={user} repos={repos} />
+    <style jsx>{style}</style>
+  </div>
+);
 
-  return (
-    <div className="user-contents-wrapper">
-      <Profile user={user} />
-      <Repositories user={user} repos={repos} />
-      <style jsx>{style}</style>
-    </div>
-  );
-}
-
-//! 새로고침으로는 재호출이 안되고 페이지를 이동해야 호출이 된다
-export async function getServerSideProps({ query }) {
+// ? 다시 호출하려면 페이지 이동을 통해 페이지를 다시 불러와야한다.
+export const getServerSideProps = async ({ query }) => {
   const { name, page } = query;
+
+  console.log('name, page: ', name, page);
+
   try {
     let user;
     let repos;
 
-    const res = await axios.get(`https://api.github.com/users/${name}`);
-    // 유저가 있는지 확인
-    if (res.status === 200) {
-      user = await res.data;
+    const userRes = await axios.get(`https://api.github.com/users/${name}`);
+
+    if (userRes.status === 200) {
+      user = await userRes.data;
     }
+
     const repoRes = await axios.get(
       `https://api.github.com/users/${name}/repos?sort=updated&page=${page}&per_page=10`
     );
+
     if (repoRes.status === 200) {
       repos = await repoRes.data;
     }
-    console.log(repos);
-    return {
-      props: { user, repos },
-    };
-  } catch (e) {
-    console.log(e);
-    return {
-      props: {},
-    };
-  }
-}
 
-//  ! next 9.3 이전 서버사이드 랜더링 방식
-// name.getInitialProps = async ({ query }) => {
-//   const { name } = query;
-//   try {
-//     const res = await axios.get(`https://api.github.com/user/${name}`);
-//     if (res.status === 200) {
-//       const user = await res.data;
-//       return {
-//         props: {
-//           user,
-//         },
-//       };
-//     }
-//     return {
-//       props: {},
-//     };
-//   } catch (e) {
-//     console.log(e);
-//     return {};
-//   }
-// };
+    return {
+      props: {
+        user,
+        repos,
+      },
+    };
+  } catch (error) {
+    console.error(error);
+    return { props: {} };
+  }
+};
+
+export default Name;
