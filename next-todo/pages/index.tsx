@@ -1,38 +1,19 @@
+import TodoList from 'components/TodoList';
+import React from 'react';
 import { NextPage } from 'next';
-import TodoList from '../components/TodoList';
-import { getTodosAPI } from '../lib/api/todo';
-import { wrapper } from '../store';
-import { todoActions } from '../store/todo';
-import { TodoType } from '../types/todo';
+import { TodoType } from 'typings/todo';
 
-interface IProps {
-  todos: TodoType[];
-}
+const todos: TodoType[] = [
+  { id: 1, text: '마트 기사 장보기', color: 'red', checked: false },
+  { id: 2, text: '수학 숙제하기', color: 'orange', checked: false },
+  { id: 3, text: '코딩하기', color: 'yellow', checked: true },
+  { id: 4, text: '넥스트 공부하기', color: 'green', checked: true },
+  { id: 5, text: '요리 연습하기', color: 'blue', checked: false },
+  { id: 6, text: '분리수거 하기', color: 'navy', checked: false },
+];
 
-/**
- * 시작 페이지
- */
-const index: NextPage<IProps> = () => {
-  console.log(process.env.NEXT_PUBLIC_API_URL, '클라이언트');
-  return <TodoList />;
+const index: NextPage = () => {
+  return <TodoList todos={todos} />;
 };
-
-export const getServerSideProps = wrapper.getServerSideProps(
-  async ({ store }) => {
-    console.log(store);
-    try {
-      const { data } = await getTodosAPI();
-      store.dispatch(todoActions.setTodo(data)); //* 스토어 업데이트
-      return {
-        props: {},
-      };
-    } catch (error) {
-      console.log(error);
-      return {
-        props: {},
-      };
-    }
-  }
-);
 
 export default index;

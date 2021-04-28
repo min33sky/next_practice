@@ -6,7 +6,6 @@ module.exports = {
   extends: [
     'plugin:react/recommended',
     'airbnb',
-    'prettier/@typescript-eslint',
     'plugin:prettier/recommended',
   ],
   parser: '@typescript-eslint/parser',
@@ -29,7 +28,7 @@ module.exports = {
     ],
     'react/jsx-filename-extension': [
       1,
-      { extensions: ['.js', '.jsx', '.ts', '.tsx'] },
+      { extensions: ['.js', '.jsx', '.ts', '.tsx'] }, // jsx 사용 가능한 확장자 설정
     ],
     'react/react-in-jsx-scope': 'off',
     'react/prop-types': 'off',
@@ -41,7 +40,13 @@ module.exports = {
     'import/extensions': [
       'error',
       'ignorePackages',
-      { js: 'never', jsx: 'never', ts: 'never', tsx: 'never', json: 'never' },
+      {
+        js: 'never',
+        jsx: 'never',
+        ts: 'never',
+        tsx: 'never',
+        json: 'never',
+      }, // import 시 확장자명은 사용하지 않는다.
     ],
     'no-case-declarations': 'off',
     'no-use-before-define': 'off',
@@ -55,7 +60,10 @@ module.exports = {
   },
   settings: {
     'import/resolver': {
-      node: { extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts'] },
+      node: {
+        extensions: ['.js', '.jsx', '.ts', '.tsx', '.d.ts'],
+        paths: ['./'],
+      },
     },
   },
 };
