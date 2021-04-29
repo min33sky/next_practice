@@ -1,13 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import Data from 'lib/api/data';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method === 'GET') {
+  if (req.method === 'PATCH') {
     try {
-      const todos = await Data.todo.getList();
-
+      console.log(req.query);
       res.statusCode = 200;
-      return res.send(todos);
+      return res.end();
     } catch (error) {
       console.log(error);
       res.statusCode = 500;
