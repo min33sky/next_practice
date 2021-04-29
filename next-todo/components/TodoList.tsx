@@ -98,6 +98,7 @@ const Container = styled.div`
         display: flex;
         margin-right: 12px;
 
+        /* SVG Icon */
         svg {
           &:first-child {
             margin-right: 16px;
@@ -115,6 +116,7 @@ const Container = styled.div`
           fill: ${palette.deep_green};
         }
 
+        /* Check Button */
         .todo-button {
           width: 20px;
           height: 20px;
