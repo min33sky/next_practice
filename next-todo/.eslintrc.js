@@ -54,6 +54,7 @@ module.exports = {
     'no-param-reassign': 'off',
     '@typescript-eslint/no-use-before-define': ['error'],
     'react/no-array-index-key': 'off',
+    'import/prefer-default-export': 'off',
     // 리액트 Hooks 관련
     'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
     'react-hooks/exhaustive-deps': 'warn', // Checks effect dependencies
