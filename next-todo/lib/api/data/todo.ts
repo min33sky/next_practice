@@ -1,4 +1,4 @@
-import { promises as fs } from 'fs';
+import { promises as fs, writeFileSync } from 'fs';
 import { TodoType } from 'typings/todo';
 
 // 투두 리스트 데이터 불러오기
@@ -24,6 +24,26 @@ const getList = async () => {
   }
 };
 
+/**
+ * 해당 아이디의 투두의 존재 여부
+ * @param param0
+ * @returns
+ */
+const exists = async ({ id }: { id: number }) => {
+  const todos = await getList();
+  return todos.some((todo) => todo.id === id);
+};
+
+/**
+ * 투두 리스트 저장하기
+ * @param todos
+ */
+const write = async (todos: TodoType[]) => {
+  writeFileSync('data/todos.json', JSON.stringify(todos));
+};
+
 export default {
   getList,
+  exists,
+  write,
 };

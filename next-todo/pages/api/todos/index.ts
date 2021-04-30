@@ -5,9 +5,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET') {
     try {
       const todos = await Data.todo.getList();
-
-      res.statusCode = 200;
-      return res.send(todos);
+      return res.status(200).send(todos);
     } catch (error) {
       console.log(error);
       res.statusCode = 500;

@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import palette from 'styles/palette';
 import { TodoType } from 'typings/todo';
+import { checkTodoAPI } from 'lib/api/todo';
 import TrashCanIcon from '../public/statics/svg/trash_can.svg';
 import CheckMarkIcon from '../public/statics/svg/check_mark.svg';
 
@@ -140,9 +141,11 @@ type ObjectIndexType = {
 };
 
 export default function TodoList({ todos }: IProps) {
+  const [localTodos, setLocalTodos] = useState(todos);
+
   const todoColorNums = useMemo(() => {
     const colors: ObjectIndexType = {};
-    todos.forEach((todo) => {
+    localTodos.forEach((todo) => {
       const value = colors[todo.color];
       if (!value) {
         colors[`${todo.color}`] = 1;
@@ -151,13 +154,31 @@ export default function TodoList({ todos }: IProps) {
       }
     });
     return colors;
-  }, [todos]);
+  }, [localTodos]);
+
+  const checkTodo = async (id: number) => {
+    try {
+      await checkTodoAPI(id);
+      console.log('체크하였습니다.');
+      const newTodos = localTodos.map((todo) =>
+        todo.id === id
+          ? {
+              ...todo,
+              checked: !todo.checked,
+            }
+          : todo
+      );
+      setLocalTodos(newTodos);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <Container>
       <div className="todo-list-header">
         <p className="todo-list-last-todo">
-          님은 TODO<span>{todos.length}개</span>
+          님은 TODO<span>{localTodos.length}개</span>
         </p>
         <div className="todo-list-header-colors">
           {Object.keys(todoColorNums).map((color, index) => (
@@ -170,7 +191,7 @@ export default function TodoList({ todos }: IProps) {
       </div>
 
       <ul className="todo-list">
-        {todos.map((todo) => (
+        {localTodos.map((todo) => (
           <li className="todo-item" key={todo.id}>
             <div className="todo-left-side">
               <div className={`todo-color-block bg-${todo.color}`} />
@@ -183,7 +204,7 @@ export default function TodoList({ todos }: IProps) {
                 <button
                   type="button"
                   className="todo-button"
-                  onClick={() => {}}
+                  onClick={() => checkTodo(todo.id)}
                 >
                   {}
                 </button>
@@ -193,7 +214,7 @@ export default function TodoList({ todos }: IProps) {
                   <TrashCanIcon className="todo-trash-can" onClick={() => {}} />
                   <CheckMarkIcon
                     className="todo-check-mark"
-                    onClick={() => {}}
+                    onClick={() => checkTodo(todo.id)}
                   />
                 </>
               )}
