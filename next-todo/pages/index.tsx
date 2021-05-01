@@ -1,36 +1,32 @@
 import TodoList from 'components/TodoList';
 import React from 'react';
 import { NextPage, GetServerSideProps } from 'next';
-import { TodoType } from 'typings/todo';
 import { getTodosAPI } from 'lib/api/todo';
+import { wrapper } from 'store';
+import { todoActions } from 'store/todo';
 
-interface IProps {
-  todos: TodoType[];
-}
-
-const StartPage: NextPage<IProps> = ({ todos }) => {
-  console.log(process.env.NEXT_PUBLIC_API_URL, '클라이언트');
-  return <TodoList todos={todos} />;
+const StartPage: NextPage = () => {
+  return <TodoList />;
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
-  try {
-    console.log(process.env, '서버');
-    const { data } = await getTodosAPI();
-    console.log(data);
-    return {
-      props: {
-        todos: data,
-      },
-    };
-  } catch (error) {
-    console.error(error);
-    return {
-      props: {
-        todos: [],
-      },
-    };
+export const getServerSideProps: GetServerSideProps = wrapper.getServerSideProps(
+  async ({ store }) => {
+    try {
+      const { data } = await getTodosAPI();
+
+      // 스토어 업데이트
+      store.dispatch(todoActions.setTodo(data));
+
+      return {
+        props: {},
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        props: {},
+      };
+    }
   }
-};
+);
 
 export default StartPage;

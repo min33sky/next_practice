@@ -3,6 +3,7 @@ import React from 'react';
 import Header from 'components/Header';
 import GlobalStyle from 'styles/GlobalStyle';
 import Footer from 'components/Footer';
+import { wrapper } from 'store';
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
@@ -15,4 +16,4 @@ const App = ({ Component, pageProps }: AppProps) => {
   );
 };
 
-export default App;
+export default wrapper.withRedux(App);
