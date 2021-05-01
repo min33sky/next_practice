@@ -38,7 +38,7 @@ const exists = async ({ id }: { id: number }) => {
  * 투두 리스트 저장하기
  * @param todos
  */
-const write = async (todos: TodoType[]) => {
+const write = (todos: TodoType[]) => {
   writeFileSync('data/todos.json', JSON.stringify(todos));
 };
 

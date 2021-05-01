@@ -10,6 +10,7 @@ const globalStayle = css`
 
   body {
     font-family: Noto Sans, Noto Sans KR;
+    background-color: snow;
   }
 `;
 

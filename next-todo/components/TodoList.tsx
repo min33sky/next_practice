@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import palette from 'styles/palette';
 import { TodoType } from 'typings/todo';
-import { checkTodoAPI } from 'lib/api/todo';
+import { checkTodoAPI, deleteTodoAPI } from 'lib/api/todo';
 import TrashCanIcon from '../public/statics/svg/trash_can.svg';
 import CheckMarkIcon from '../public/statics/svg/check_mark.svg';
 
@@ -156,7 +156,7 @@ export default function TodoList({ todos }: IProps) {
     return colors;
   }, [localTodos]);
 
-  const checkTodo = async (id: number) => {
+  const onClickCheckTodo = async (id: number) => {
     try {
       await checkTodoAPI(id);
       console.log('체크하였습니다.');
@@ -169,6 +169,17 @@ export default function TodoList({ todos }: IProps) {
           : todo
       );
       setLocalTodos(newTodos);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const onClickDeleteTodo = async (id: number) => {
+    try {
+      await deleteTodoAPI(id);
+      const newTodos = localTodos.filter((todo) => todo.id !== id);
+      setLocalTodos(newTodos);
+      console.log('삭제 완료');
     } catch (error) {
       console.error(error);
     }
@@ -199,22 +210,26 @@ export default function TodoList({ todos }: IProps) {
                 {todo.text}
               </p>
             </div>
+
             <div className="todo-right-side">
               {!todo.checked && (
                 <button
                   type="button"
                   className="todo-button"
-                  onClick={() => checkTodo(todo.id)}
+                  onClick={() => onClickCheckTodo(todo.id)}
                 >
-                  {}
+                  &nbsp;
                 </button>
               )}
               {todo.checked && (
                 <>
-                  <TrashCanIcon className="todo-trash-can" onClick={() => {}} />
+                  <TrashCanIcon
+                    className="todo-trash-can"
+                    onClick={() => onClickDeleteTodo(todo.id)}
+                  />
                   <CheckMarkIcon
                     className="todo-check-mark"
-                    onClick={() => checkTodo(todo.id)}
+                    onClick={() => onClickCheckTodo(todo.id)}
                   />
                 </>
               )}
